@@ -1,0 +1,6 @@
+\section{Limitations}
+\label{sec:limitations}
+
+This is a controlled mechanism paper. The environment is synthetic, one-dimensional, and designed to expose the score-utility-support relation cleanly. The learned policy is DT-style but small; it is not a large Transformer and is not intended to establish benchmark performance. The support estimator is simple, based on empirical return quantiles and action likelihood under a lightweight behavior model. The pilot-calibrated repair assumes access to a small number of real-utility labels, which may be expensive or unavailable in realistic deployments. The oracle selector is only a diagnostic upper bound.
+
+The repair results should not be read as a universal prescription. In this run, likelihood and pilot calibration recover real utility under the out-of-support target, while support calibration and conservative gating mostly act by lowering target ambition and risk. Different environments could require different support estimators, uncertainty estimates, or conservative objectives. The paper therefore supports the mechanism claim and the measured synthetic repairs, not broad benchmark conclusions.

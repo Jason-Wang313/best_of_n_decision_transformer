@@ -1,0 +1,44 @@
+\section{Best-of-\texorpdfstring{$N$}{N} from first principles}
+\label{sec:theory}
+
+Let $\cand \sim \dist$ denote a candidate trajectory sampled from an inference-time proposal distribution. Each candidate has a selection score $\score=s(\cand)$ and real utility $\utility=r(\cand)$. Best-of-$N$ draws $\cand_1,\ldots,\cand_N$ iid from $\dist$ and returns one candidate whose score is maximal. If several sampled candidates tie for maximal score, the selected candidate is drawn uniformly from the tied set.
+
+\paragraph{Tie-aware finite-$N$ law.}
+Suppose the score takes grouped values $z_1 < \cdots < z_G$. Let
+\[
+  p_g = \Prob(\score=z_g), \qquad
+  F_g = \sum_{h \leq g} p_h, \qquad
+  \mu_g = \E[\utility \mid \score=z_g].
+\]
+Set $F_0=0$. The event that the winning score group is $g$ occurs exactly when all $N$ sampled scores are at most $z_g$ and at least one sampled score equals $z_g$.
+
+\begin{proposition}[Tie-aware Best-of-$N$ utility law]
+\label{prop:law}
+For iid sampling with uniform tie-breaking among maximal-score candidates,
+\[
+  \E[\utility_{\best(N)}]
+  =
+  \sum_{g=1}^{G}
+  \left(F_g^N - F_{g-1}^N\right)\mu_g.
+\]
+Likewise,
+\[
+  \E[\score_{\best(N)}]
+  =
+  \sum_{g=1}^{G}
+  \left(F_g^N - F_{g-1}^N\right)z_g.
+\]
+\end{proposition}
+
+The proof is short and useful. The probability that the maximal score level is $g$ is $F_g^N-F_{g-1}^N$. Conditional on this event, the selected candidate is exchangeable among candidates whose score equals $z_g$, so uniform tie-breaking yields the score-group mean utility $\mu_g$. Summing over $g$ gives the result.
+
+\paragraph{What the law says, and what it does not say.}
+As $N$ increases, the weights $F_g^N-F_{g-1}^N$ move toward larger score groups. Best-of-$N$ is therefore a tail-pressure operator: it improves the selected score by construction, but the real-utility effect depends on the conditional tail curve $g \mapsto \mu_g$. If $\mu_g$ rises with $z_g$ in the relevant tail, Best-of-$N$ helps. If it falls, Best-of-$N$ hurts. If the curve flattens, it saturates.
+
+This is the central lens for return-conditioned policies. A target return can push the proposal distribution into a region where the proxy score remains optimistic while real utility degrades. In that case, increasing $N$ makes the selected trajectory more score-extreme and less useful. Conversely, under in-support targets or well-aligned scores, the same selection rule can improve real utility.
+
+\paragraph{Tail Phase Diagram.}
+We operationalize this statement by comparing the first and last evaluated $N$ values. Let $\Delta_S=\E[\score_{\best(N_{\max})}]-\E[\score_{\best(1)}]$ and $\Delta_R=\E[\utility_{\best(N_{\max})}]-\E[\utility_{\best(1)}]$. We label a condition as \emph{helps} when $\Delta_R$ is meaningfully positive, \emph{hurts} when it is meaningfully negative, and \emph{saturates} when score pressure does not translate into a material utility shift. The diagram is not a universal taxonomy; it is a compact diagnostic for the measured score-utility tail in a fixed candidate distribution.
+
+\paragraph{Connection to continuous scores.}
+If the score distribution is continuous and ties occur with probability zero, Proposition~\ref{prop:law} becomes the familiar maximum-order-statistic identity. Writing $m(s)=\E[\utility\mid \score=s]$ and $F$ for the score CDF, the selected utility is the expectation of $m(M_N)$ where $M_N=\max_i \score_i$. The discrete law is the version we need in finite experiments because rounded scores, learned models, and finite candidate pools can create real ties.

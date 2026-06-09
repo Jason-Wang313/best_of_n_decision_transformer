@@ -1,6 +1,9 @@
 # Theory
 
-The finite-N law groups candidates by selection score. If `F_g` is the cumulative probability up to score group `g`, then the probability that group `g` wins Best-of-N is `F_g^N - F_{g-1}^N`. Multiplying by the group-average real utility gives the exact selected utility expectation.
+Source of truth: `paper/sections/theory.tex`, with proof details in `paper/sections/appendix.tex`.
 
-This law explains why Best-of-N is not inherently good or bad. Increasing `N` increases pressure toward the high-score tail. The sign of the real-utility effect depends on what real utility looks like in that tail.
+The manuscript states the tie-aware finite-N law for grouped score levels:
 
+`E[R_BoN(N)] = sum_g (F_g^N - F_{g-1}^N) mu_g`.
+
+The section emphasizes that Best-of-N shifts mass toward the high-score tail. Whether real utility improves is determined by the conditional tail means `mu_g = E[R | S = z_g]`, not by `N` alone.

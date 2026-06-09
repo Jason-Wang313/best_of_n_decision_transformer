@@ -1,6 +1,12 @@
 # Experiments
 
-The full experiment evaluates `N = {1, 2, 4, 8, 16, 32, 64}` across in-support, edge-support, and out-of-support target returns. The primary figure, `return_conditioning_fantasy`, shows selected proxy return and real utility under the out-of-support prompt. `target_return_sweep` varies the target return across and beyond the offline support boundary. `repair_comparison` compares the repair ladder at high `N`. `exact_law_validation` compares the tie-aware law to Monte Carlo estimates.
+Source of truth: `paper/sections/experiments.tex`, included by `paper/main.tex`.
 
-The in-support and anti-aligned scorer controls are included to make the claim conditional rather than universal.
+The LaTeX experiments section is organized around four questions:
 
+- Does naive Best-of-N improve proxy return while harming real utility out of support?
+- Does the exact law match Monte Carlo?
+- Do in-support and anti-aligned controls behave as predicted?
+- Do support, likelihood, gate, and pilot repairs reduce the failure?
+
+It includes all required figures from `figures/` and tables with numbers from `results/selection_summary.csv`, `results/target_return_sweep.csv`, `results/exact_law_validation.csv`, and `results/claims_status.md`.

@@ -1,0 +1,106 @@
+\section{Experiments}
+\label{sec:experiments}
+
+All reported numbers are from the existing full run in the repository. Each grid cell uses $64$ replicates. We organize the experiments around four questions.
+
+\subsection{Does Best-of-\texorpdfstring{$N$}{N} improve proxy return while harming real utility out of support?}
+
+Yes, in the controlled out-of-support condition. Table~\ref{tab:headline} shows the phase split. In support and at the support edge, naive Best-of-$N$ improves selected real utility. Out of support, it improves the proxy score but decreases real utility.
+
+\begin{table}[t]
+\centering
+\caption{\textbf{Naive Best-of-$N$ phases.} The same selection rule helps under supported targets and hurts under the out-of-support target. Values are means across replicates.}
+\label{tab:headline}
+\begin{tabular}{lrrrrl}
+\toprule
+Target & Support gap & $\score_{N=1}$ & $\score_{N=64}$ & $\utility_{N=1}\rightarrow\utility_{N=64}$ & Phase \\
+\midrule
+In support & 0.000 & 4.821 & 4.978 & $4.821 \rightarrow 4.975$ & helps \\
+Edge support & 0.000 & 6.312 & 6.478 & $6.311 \rightarrow 6.454$ & helps \\
+Out of support & 3.000 & 9.299 & 9.468 & $7.825 \rightarrow 7.381$ & hurts \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The failure is not a mere lack of prompt satisfaction. For the out-of-support target $\tau=9.314$, selected proxy return is already close to the prompt at $N=1$ and becomes larger as $N$ grows. What changes is the tail: the selected risk rises from $0.0123$ to $0.0174$, behavior log-likelihood falls from $-4.888$ to $-5.325$, and real utility drops by $0.444$. Figure~\ref{fig:fantasy} visualizes this divergence.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=0.92\linewidth]{figures/target_return_sweep.pdf}
+  \caption{\textbf{Target-return sweep.} At low and supported target returns, increasing $N$ generally improves real utility. As the requested return moves beyond support, the $N=64$ real-utility gain turns negative even though proxy return remains high.}
+  \label{fig:sweep}
+\end{figure}
+
+The sweep in Figure~\ref{fig:sweep} shows the transition across target returns. For example, at target $7.733$ the $N=64$ real-utility gap is $-0.123$; at target $8.920$ it is $-0.523$; at target $9.514$ it is $-0.604$. This is the empirical Tail Phase Diagram: the sign of the Best-of-$N$ effect changes as support gap grows.
+
+\subsection{Does the exact law match Monte Carlo?}
+
+Yes. The exact tie-aware law is evaluated on a finite candidate pool with rounded proxy scores to create ties. Table~\ref{tab:law} reports representative rows. The maximum absolute error in expected real utility across all evaluated $N$ values is $0.00535$, well within one to two Monte Carlo standard errors for the reported rows.
+
+\begin{table}[t]
+\centering
+\caption{\textbf{Tie-aware law validation.} Exact expected real utility closely matches Monte Carlo estimates for Best-of-$N$ on the finite candidate distribution.}
+\label{tab:law}
+\begin{tabular}{rrrrr}
+\toprule
+$N$ & Exact $\E[\utility]$ & MC $\E[\utility]$ & Abs. error & MC stderr \\
+\midrule
+1 & 7.879 & 7.878 & 0.00049 & 0.00350 \\
+8 & 7.706 & 7.707 & 0.00103 & 0.00386 \\
+16 & 7.660 & 7.666 & 0.00534 & 0.00403 \\
+64 & 7.516 & 7.520 & 0.00403 & 0.00456 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=0.90\linewidth]{figures/exact_law_validation.pdf}
+  \caption{\textbf{Exact law validation.} The closed-form finite-$N$ curve tracks Monte Carlo estimates as selection pressure moves toward the high-score, lower-utility tail.}
+  \label{fig:law}
+\end{figure}
+
+\subsection{Do controls behave as predicted?}
+
+The in-support control confirms that Best-of-$N$ is not being portrayed as universally harmful. Under the in-support target, naive real utility rises from $4.821$ to $4.975$ between $N=1$ and $N=64$. The edge-support target also improves, from $6.311$ to $6.454$.
+
+The anti-aligned scorer control goes in the opposite direction. We select candidates using a score that is intentionally anti-aligned with real utility under the in-support target. Real utility falls from $4.841$ at $N=1$ to $4.653$ at $N=64$, a change of $-0.188$. This matches Proposition~\ref{prop:law}: increasing $N$ amplifies the high-score tail of whichever score is used.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=0.86\linewidth]{figures/support_diagnostics.pdf}
+  \caption{\textbf{Support diagnostics.} The out-of-support prompt lies beyond the empirical $q_{95}$ and maximum offline proxy-return support. The failure case is therefore an extrapolative target-return condition, not an ordinary supported request.}
+  \label{fig:support}
+\end{figure}
+
+\subsection{Do repairs reduce the failure?}
+
+Table~\ref{tab:repairs} compares the out-of-support condition at $N=64$. The support-calibrated and conservative-gate rows lower the effective target, dramatically reduce risk, and return candidates closer to the behavior distribution; they should be read as deployment refusals or target reductions, not as attempts to maximize the original high prompt. Likelihood-constrained and pilot-calibrated selection keep the original high-target setting but recover real utility by avoiding the riskiest high-proxy candidates. Pilot calibration improves real utility over naive by $1.009$, close to the oracle diagnostic gain of $1.085$.
+
+\begin{table}[t]
+\centering
+\caption{\textbf{Out-of-support repair diagnostics at $N=64$.} Likelihood and pilot repairs recover real utility under the high target. Support and gate repairs mainly reduce off-support pressure and risk.}
+\label{tab:repairs}
+\begin{tabular}{lrrrr}
+\toprule
+Strategy & $\score$ & $\utility$ & Risk & $\Delta\utility$ vs naive \\
+\midrule
+Naive & 9.468 & 7.381 & 0.01739 & 0.000 \\
+Support-calibrated & 6.484 & 6.455 & 0.00024 & -0.926 \\
+Conservative gate & 5.672 & 5.661 & 0.00009 & -1.720 \\
+Likelihood-constrained & 9.217 & 8.457 & 0.00633 & 1.076 \\
+Pilot-calibrated & 9.199 & 8.390 & 0.00674 & 1.009 \\
+Oracle real & 9.247 & 8.466 & 0.00651 & 1.085 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=0.92\linewidth]{figures/repair_comparison.pdf}
+  \caption{\textbf{Repair comparison.} Under the out-of-support target, support-aware and utility-aware selectors change the selected tail. The oracle row is a diagnostic upper bound; pilot calibration is the deployable proxy for limited real-utility labels in this study.}
+  \label{fig:repair}
+\end{figure}
+
+\paragraph{Claim audit.}
+The repository audit returns the verdict \texttt{paper-worthy v1}. The supported claims are exactly the controlled claims tested here: finite-$N$ law validation, out-of-support fantasy detection, in-support and anti-aligned controls, repair diagnostics, deployment-gate validity, and absence of forbidden overclaims in the scanned Markdown artifacts.

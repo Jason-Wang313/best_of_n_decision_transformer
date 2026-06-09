@@ -1,0 +1,12 @@
+\section{Ethics and reproducibility}
+\label{sec:ethics}
+
+The study uses synthetic data and has no human-subject component. The main risk is conceptual misuse: treating higher selected proxy return as evidence of real improvement without checking support and utility tails. The intended use is the opposite: to encourage audits before deploying high-$N$ inference on learned proxies.
+
+The repository contains code, tests, figures, CSV outputs, and a claim audit. The full run uses seed $313$, $450$ offline trajectories, horizon $12$, $64$ replicates per grid cell, and $N \in \{1,2,4,8,16,32,64\}$. Reproducibility commands are:
+\[
+\texttt{bash scripts/run\_all.sh}, \quad
+\texttt{bash scripts/run\_claim\_audit.sh}, \quad
+\texttt{pytest}.
+\]
+The audit verdict and exact evidence are stored in \texttt{results/claims\_status.md} and \texttt{results/claims\_status.json}.

@@ -1,6 +1,5 @@
 # Related Work
 
-This skeleton connects to work on Decision Transformers, offline reinforcement learning, reward-model reranking, Best-of-N inference, calibration, conservative policy improvement, and support constraints. The controlled law here is closest in spirit to order-statistic analyses, but it focuses on the selected real utility when the score is only a proxy.
+Source of truth: `paper/sections/related_work.tex` and `paper/references.bib`.
 
-The synthetic setup should be replaced or complemented with benchmark environments before making broader empirical claims.
-
+The LaTeX section covers return-conditioned sequence modeling, offline RL support constraints, Best-of-N reward-model reranking, calibration, order statistics, extreme-value context, and proxy misspecification. The bibliography includes primary arXiv/proceedings-style entries for Decision Transformer, Trajectory Transformer, CQL, D4RL, offline RL surveys, reward-model overoptimization, and Best-of-N alignment analyses.

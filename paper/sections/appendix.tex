@@ -1,0 +1,38 @@
+\section{Additional derivation and implementation details}
+\label{app:details}
+
+\subsection{Proof of Proposition~\ref{prop:law}}
+
+Let $A_g$ be the event that the maximal sampled score equals $z_g$. Since the $N$ candidates are iid,
+\[
+  \Prob(A_g)=\Prob(\max_i \score_i \leq z_g)-\Prob(\max_i \score_i \leq z_{g-1})
+  =F_g^N-F_{g-1}^N.
+\]
+Conditional on $A_g$, at least one sampled candidate lies in group $g$ and no sampled candidate has a higher score. Uniform tie-breaking selects among the sampled group-$g$ candidates. Because the sampled candidates inside group $g$ are exchangeable and drawn from the conditional distribution $\dist(\cand\mid \score=z_g)$, the selected utility has expectation $\mu_g$. Therefore
+\[
+  \E[\utility_{\best(N)}]
+  =\sum_g \Prob(A_g)\E[\utility_{\best(N)}\mid A_g]
+  =\sum_g (F_g^N-F_{g-1}^N)\mu_g.
+\]
+Replacing $\mu_g$ by $z_g$ gives the selected-score identity.
+
+\subsection{Experiment configuration}
+
+The full experiment configuration in \texttt{results/summary.json} is:
+\[
+\begin{array}{ll}
+\text{seed} & 313 \\
+\text{offline trajectories} & 450 \\
+\text{horizon} & 12 \\
+\text{replicates per grid cell} & 64 \\
+\text{candidate counts} & 1,2,4,8,16,32,64 \\
+\text{model noise scale} & 0.32 \\
+\text{safe action} & 0.72 \\
+\text{action clip} & 1.65
+\end{array}
+\]
+The support diagnostics are computed from the offline proxy-return distribution. The support boundary used in the microscope is the empirical $q_{95}=6.31391436589062$.
+
+\subsection{Deployment gate}
+
+The deployment gate returns one of four actions: allow high-$N$ selection, lower the target return, collect pilot real-utility labels, or block high-$N$ selection. In the full run, the in-support and edge-support examples return \texttt{allow\_high\_n}; the out-of-support example returns \texttt{collect\_pilot\_labels}. This gate is a diagnostic policy for the synthetic environment, not a general deployment standard.

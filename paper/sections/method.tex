@@ -1,0 +1,36 @@
+\section{Controlled DT-style study}
+\label{sec:method}
+
+We build a minimal environment in which support mismatch and proxy mismatch can be observed without benchmark confounds. The environment is one-dimensional, has horizon $H=12$, and generates offline trajectories from a behavior policy with scarce high-return support. The learned policy is intentionally small: it is a return-to-go-conditioned sequence model that predicts each action from state, previous action, time, and desired return-to-go. We call it DT-style because it uses the Decision Transformer control interface, not because it is a benchmark-scale Transformer.
+
+\paragraph{Proxy return and real utility.}
+For an action $a$, the internal reward used as the selection score is
+\[
+  r_S(a) = a - 0.025a^2.
+\]
+Real utility keeps the same progress term but adds a convex penalty outside the safe action region:
+\[
+  r_R(a) =
+  r_S(a)
+  - 10\max(|a|-0.72,0)^2
+  - 0.18\max(a-1.20,0).
+\]
+Trajectory-level $\score$ and $\utility$ are sums over the horizon. The behavior data is clipped near the safe region and contains only rare near-edge actions, creating the intended offline support boundary.
+
+\paragraph{Offline support.}
+The full run uses $450$ offline trajectories and seed $313$. The empirical proxy-return support has median $3.579$, $q_{90}=5.500$, $q_{95}=6.314$, $q_{99}=7.105$, and maximum $7.229$. We evaluate three target returns: in-support $4.808$, edge-support $6.314$, and out-of-support $9.314$. The out-of-support target is exactly $3.000$ above the $q_{95}$ boundary.
+
+\paragraph{Best-of-$N$ evaluator.}
+For each target and each $N \in \{1,2,4,8,16,32,64\}$, we sample candidate trajectories from the learned policy and select according to a strategy. The naive strategy selects the candidate with largest proxy return $\score$. We report selected proxy return, selected real utility, risk, behavior log-likelihood under a simple support estimator, prompt-satisfaction gap $|\tau-\score|$, support gap $\max(\tau-q_{95},0)$, and real-utility gap relative to the $N=1$ baseline for the same condition.
+
+\paragraph{Return Fantasy Microscope.}
+For target $\tau$, selected proxy $\score_N$, selected real utility $\utility_N$, support boundary $b$, and baseline real utility $\utility_1$, the microscope reports
+\[
+  \text{prompt gap}=|\tau-\score_N|,\quad
+  \text{support gap}=\max(\tau-b,0),\quad
+  \text{real gap}=\utility_N-\utility_1.
+\]
+A return-conditioning fantasy is the pattern ``low prompt gap, positive support gap, negative real gap'': the candidate looks closer to the requested return while moving outside support and losing real utility.
+
+\paragraph{Repair ladder.}
+We evaluate five non-naive selectors. \emph{Support-calibrated} selection lowers the requested target to a support quantile before sampling. \emph{Likelihood-constrained} selection keeps candidates whose behavior log-likelihood exceeds a support threshold, falling back to a penalized score if no candidate passes. \emph{Conservative gating} maps high-risk deployment cases to a lower target or pilot-label collection. \emph{Pilot-calibrated} selection fits a small real-utility model from pilot candidates using proxy return and risk. \emph{Oracle-real} selection is a diagnostic upper bound that selects by true utility and is not deployable.
