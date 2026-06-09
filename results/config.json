@@ -1,0 +1,27 @@
+{
+  "action_clip": 1.65,
+  "figure_formats": [
+    "png",
+    "pdf"
+  ],
+  "horizon": 12,
+  "metadata": {},
+  "mode": "full",
+  "model_noise_scale": 0.32,
+  "n_pilot": 16,
+  "n_replicates": 64,
+  "n_trajectories": 450,
+  "n_values": [
+    1,
+    2,
+    4,
+    8,
+    16,
+    32,
+    64
+  ],
+  "output_dir": "C:\\Users\\wangz\\best_of_n_decision_transformer",
+  "ridge": 0.001,
+  "safe_action": 0.72,
+  "seed": 313
+}

@@ -1,0 +1,68 @@
+{
+  "audit_verdict": "paper-worthy v1",
+  "config": {
+    "action_clip": 1.65,
+    "figure_formats": [
+      "png",
+      "pdf"
+    ],
+    "horizon": 12,
+    "metadata": {},
+    "mode": "full",
+    "model_noise_scale": 0.32,
+    "n_pilot": 16,
+    "n_replicates": 64,
+    "n_trajectories": 450,
+    "n_values": [
+      1,
+      2,
+      4,
+      8,
+      16,
+      32,
+      64
+    ],
+    "output_dir": "C:\\Users\\wangz\\best_of_n_decision_transformer",
+    "ridge": 0.001,
+    "safe_action": 0.72,
+    "seed": 313
+  },
+  "gate_examples": {
+    "edge_support": "allow_high_n",
+    "in_support": "allow_high_n",
+    "out_of_support": "collect_pilot_labels"
+  },
+  "mode": "full",
+  "phase_rows": [
+    {
+      "phase": "helps",
+      "target_label": "in_support",
+      "target_return": 4.807816826719196
+    },
+    {
+      "phase": "helps",
+      "target_label": "edge_support",
+      "target_return": 6.31391436589062
+    },
+    {
+      "phase": "hurts",
+      "target_label": "out_of_support",
+      "target_return": 9.31391436589062
+    }
+  ],
+  "support": {
+    "max_return": 7.2286062331700975,
+    "q50": 3.5786936782018417,
+    "q90": 5.500392451083699,
+    "q95": 6.31391436589062,
+    "q99": 7.104500583826632,
+    "support_gap_q95": 3.0,
+    "support_gap_q99": 2.2094137820639874,
+    "target_return": 9.31391436589062
+  },
+  "targets": {
+    "edge_support": 6.31391436589062,
+    "in_support": 4.807816826719196,
+    "out_of_support": 9.31391436589062
+  }
+}
