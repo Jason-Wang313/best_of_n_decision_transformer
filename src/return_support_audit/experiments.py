@@ -1,4 +1,4 @@
-"""Experiment pipeline for the controlled Best-of-N DT study."""
+"""Experiment pipeline for the controlled return-support audit."""
 
 from __future__ import annotations
 
@@ -10,7 +10,7 @@ from typing import Any
 import numpy as np
 
 from .audit import run_claim_audit
-from .best_of_n import best_of_n_monte_carlo, exact_best_of_n_expectation
+from .tail_selection import top_score_monte_carlo, exact_top_score_expectation
 from .config import ExperimentConfig
 from .data import generate_offline_dataset
 from .figures import make_all_figures
@@ -101,7 +101,7 @@ def _select(
     if strategy == "support_calibrated":
         effective_target = support.calibrate_target(original_target, 0.95)
     elif strategy == "conservative_gate":
-        if gate in {"lower_target_return", "collect_pilot_labels", "block_high_n"}:
+        if gate in {"lower_target_return", "collect_pilot_labels", "block_candidate_sweep"}:
             effective_target = support.calibrate_target(original_target, 0.90)
 
     candidates = _candidate_set(model, support, effective_target, n, rng, config)
@@ -291,7 +291,7 @@ def evaluate_anti_aligned_control(
     return rows
 
 
-def evaluate_exact_law_validation(
+def evaluate_exact_accounting_validation(
     model: TinyDecisionTransformer,
     support: SupportEstimator,
     target_return: float,
@@ -306,8 +306,8 @@ def evaluate_exact_law_validation(
     trials = 2_000 if config.mode == "smoke" else 10_000
     rows = []
     for n in config.n_values:
-        exact = exact_best_of_n_expectation(scores, utilities, n)
-        mc = best_of_n_monte_carlo(scores, utilities, n, n_trials=trials, seed=config.seed + n)
+        exact = exact_top_score_expectation(scores, utilities, n)
+        mc = top_score_monte_carlo(scores, utilities, n, n_trials=trials, seed=config.seed + n)
         rows.append(
             {
                 "n": int(n),
@@ -379,7 +379,7 @@ def run_experiment(config: ExperimentConfig) -> dict[str, Any]:
     raw_rows, aggregated = evaluate_grid(model, support, targets, config)
     target_sweep = evaluate_target_sweep(model, support, config)
     anti_aligned = evaluate_anti_aligned_control(model, support, targets["in_support"], config)
-    exact_rows = evaluate_exact_law_validation(model, support, targets["out_of_support"], config)
+    exact_rows = evaluate_exact_accounting_validation(model, support, targets["out_of_support"], config)
     phase_rows = _phase_rows(aggregated, targets)
 
     gate_examples = {
@@ -401,7 +401,7 @@ def run_experiment(config: ExperimentConfig) -> dict[str, Any]:
     write_csv(results_dir / "selection_summary.csv", aggregated)
     write_csv(results_dir / "target_return_sweep.csv", target_sweep)
     write_csv(results_dir / "anti_aligned_control.csv", anti_aligned)
-    write_csv(results_dir / "exact_law_validation.csv", exact_rows)
+    write_csv(results_dir / "exact_accounting_validation.csv", exact_rows)
     write_csv(results_dir / "tail_phase_diagram.csv", phase_rows)
     write_json(results_dir / "support_diagnostics.json", support.describe_target(targets["out_of_support"]))
 

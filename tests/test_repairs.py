@@ -1,7 +1,7 @@
 import numpy as np
 
-from decision_transformer_best_of_n.data import generate_offline_dataset, rollout_from_actions
-from decision_transformer_best_of_n.repairs import (
+from return_support_audit.data import generate_offline_dataset, rollout_from_actions
+from return_support_audit.repairs import (
     GATE_DECISIONS,
     SupportEstimator,
     deployment_gate,

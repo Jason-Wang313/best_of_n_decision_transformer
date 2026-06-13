@@ -20,8 +20,8 @@ Trajectory-level $\score$ and $\utility$ are sums over the horizon. The behavior
 \paragraph{Offline support.}
 The full run uses $450$ offline trajectories and seed $313$. The empirical proxy-return support has median $3.579$, $q_{90}=5.500$, $q_{95}=6.314$, $q_{99}=7.105$, and maximum $7.229$. We evaluate three target returns: in-support $4.808$, edge-support $6.314$, and out-of-support $9.314$. The out-of-support target is exactly $3.000$ above the $q_{95}$ boundary.
 
-\paragraph{Best-of-$N$ evaluator.}
-For each target and each $N \in \{1,2,4,8,16,32,64\}$, we sample candidate trajectories from the learned policy and select according to a strategy. The naive strategy selects the candidate with largest proxy return $\score$. We report selected proxy return, selected real utility, risk, behavior log-likelihood under a simple support estimator, prompt-satisfaction gap $|\tau-\score|$, support gap $\max(\tau-q_{95},0)$, and real-utility gap relative to the $N=1$ baseline for the same condition.
+\paragraph{Candidate-count evaluator.}
+For each target and each candidate count \(N \in \{1,2,4,8,16,32,64\}\), we sample candidate trajectories from the learned policy and select according to a strategy. The naive strategy selects the candidate with largest proxy return $\score$. We report selected proxy return, selected real utility, risk, behavior log-likelihood under a simple support estimator, prompt-satisfaction gap $|\tau-\score|$, support gap $\max(\tau-q_{95},0)$, and real-utility gap relative to the \(N=1\) baseline for the same condition.
 
 \paragraph{Return Fantasy Microscope.}
 For target $\tau$, selected proxy $\score_N$, selected real utility $\utility_N$, support boundary $b$, and baseline real utility $\utility_1$, the microscope reports

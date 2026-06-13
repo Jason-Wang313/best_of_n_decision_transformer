@@ -12,11 +12,10 @@ Response: Correct. The synthetic environment is chosen because the proxy/utility
 
 Response: The repairs are diagnostics, not universal prescriptions. The pilot real-utility calibration uses a small set of labels to show how hidden utility can change selection. The oracle selector is clearly marked as an upper bound.
 
-## Attack: Best-of-N can help in many settings.
+## Attack: Candidate-count selection can help in many settings.
 
-Response: The in-support negative control is included precisely to show that the result is conditional. The finite-N law says the outcome depends on the score/utility tail relation.
+Response: The in-support negative control is included precisely to show that the result is conditional. The finite-pool accounting says the outcome depends on the score/utility tail relation.
 
 ## Attack: The support estimator is crude.
 
 Response: Yes. It is deliberately simple and auditable: empirical return quantiles plus marginal action likelihood. Stronger density models are future work.
-

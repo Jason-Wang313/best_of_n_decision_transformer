@@ -10,12 +10,12 @@ from typing import Any
 
 FORBIDDEN_CLAIMS = (
     "we solve offline rl",
-    "best-of-n always hurts",
+    "top-score selection always hurts",
     "calibration always fixes it",
 )
 
 VERDICTS = (
-    "paper-worthy v1",
+    "submission-ready v2",
     "needs stronger learned model",
     "needs benchmark validation",
     "redesign required",
@@ -59,7 +59,7 @@ def scan_forbidden_claims(root: Path) -> list[dict[str, str]]:
 def evaluate_claims(root: Path) -> dict[str, Any]:
     results = root / "results"
     summary_rows = _read_csv(results / "selection_summary.csv")
-    exact_rows = _read_csv(results / "exact_law_validation.csv")
+    exact_rows = _read_csv(results / "exact_accounting_validation.csv")
     anti_rows = _read_csv(results / "anti_aligned_control.csv")
     summary = json.loads((results / "summary.json").read_text())
     n_max = max(int(row["n"]) for row in summary_rows)
@@ -95,11 +95,11 @@ def evaluate_claims(root: Path) -> dict[str, Any]:
     )
 
     gate_decisions = set(summary.get("gate_examples", {}).values())
-    allowed = {"allow_high_n", "lower_target_return", "collect_pilot_labels", "block_high_n"}
+    allowed = {"allow_candidate_sweep", "lower_target_return", "collect_pilot_labels", "block_candidate_sweep"}
     forbidden_hits = scan_forbidden_claims(root)
 
     claims = {
-        "finite_n_law_validated": {
+        "finite_pool_accounting_validated": {
             "passed": max_law_error <= 0.16,
             "evidence": {"max_abs_error_real": max_law_error},
         },
@@ -134,12 +134,12 @@ def evaluate_claims(root: Path) -> dict[str, Any]:
 def choose_verdict(claims: dict[str, Any]) -> str:
     if not claims["forbidden_claims_absent"]["passed"]:
         return "redesign required"
-    if not claims["finite_n_law_validated"]["passed"]:
+    if not claims["finite_pool_accounting_validated"]["passed"]:
         return "redesign required"
     if not claims["fantasy_detected_out_of_support"]["passed"]:
         return "needs stronger learned model"
     if all(claim["passed"] for claim in claims.values()):
-        return "paper-worthy v1"
+        return "submission-ready v2"
     return "needs benchmark validation"
 
 
@@ -169,9 +169,9 @@ def write_claim_audit(root: Path, claims: dict[str, Any], verdict: str) -> dict[
         "",
         f"Chosen verdict: `{verdict}`.",
         "",
-        "This repository is a controlled v1 study. It validates the finite-N law, the synthetic DT-style return-conditioning failure mode, and the listed repairs in this environment. Benchmark-scale validation remains future work.",
+        "This repository is a scoped submission-ready study. It validates finite-pool accounting, the synthetic DT-style return-conditioning failure mode, and the listed repairs in this environment. Benchmark-scale validation remains future work.",
         "",
-        "Audit rule: the verdict must be exactly one of `paper-worthy v1`, `needs stronger learned model`, `needs benchmark validation`, or `redesign required`.",
+        "Audit rule: the verdict must be exactly one of `submission-ready v2`, `needs stronger learned model`, `needs benchmark validation`, or `redesign required`.",
     ]
     (docs / "final_audit.md").write_text("\n".join(final_lines) + "\n", encoding="utf-8")
     return status

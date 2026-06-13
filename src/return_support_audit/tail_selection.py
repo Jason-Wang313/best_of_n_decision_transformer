@@ -1,4 +1,4 @@
-"""Finite-N Best-of-N laws and samplers."""
+"""Finite-pool accounting and samplers for score-based candidate selection."""
 
 from __future__ import annotations
 
@@ -21,13 +21,13 @@ def _normalize_probabilities(n: int, probs: Iterable[float] | None) -> np.ndarra
     return p / total
 
 
-def exact_best_of_n_expectation(
+def exact_top_score_expectation(
     scores: Iterable[float],
     utilities: Iterable[float],
     n: int,
     probs: Iterable[float] | None = None,
 ) -> dict[str, float]:
-    """Tie-aware expectation for iid Best-of-N with replacement.
+    """Tie-aware expectation for iid top-score selection with replacement.
 
     Samples are drawn iid from a finite distribution. The chosen candidate has
     maximal score; ties at the maximal score are broken uniformly. Since all
@@ -68,7 +68,7 @@ def exact_best_of_n_expectation(
     }
 
 
-def exact_finite_pool_best_of_n_without_replacement(
+def exact_finite_pool_top_score_without_replacement(
     scores: Iterable[float],
     utilities: Iterable[float],
     n: int,
@@ -101,7 +101,7 @@ def exact_finite_pool_best_of_n_without_replacement(
     }
 
 
-def best_of_n_monte_carlo(
+def top_score_monte_carlo(
     scores: Iterable[float],
     utilities: Iterable[float],
     n: int,
@@ -109,7 +109,7 @@ def best_of_n_monte_carlo(
     seed: int = 0,
     probs: Iterable[float] | None = None,
 ) -> dict[str, float]:
-    """Monte Carlo validation sampler for iid Best-of-N with uniform tie-breaking."""
+    """Monte Carlo validation sampler for iid top-score selection with uniform tie-breaking."""
 
     s = np.asarray(list(scores), dtype=float)
     r = np.asarray(list(utilities), dtype=float)

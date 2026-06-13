@@ -11,4 +11,11 @@ dist/
 .coverage
 htmlcov/
 *.log
-
+*.aux
+*.bbl
+*.blg
+*.out
+*.toc
+*.fls
+*.fdb_latexmk
+*.synctex.gz

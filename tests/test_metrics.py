@@ -1,4 +1,4 @@
-from decision_transformer_best_of_n.metrics import phase_label, return_fantasy_microscope
+from return_support_audit.metrics import phase_label, return_fantasy_microscope
 
 
 def test_return_fantasy_microscope_gaps():

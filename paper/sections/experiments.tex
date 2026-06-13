@@ -3,13 +3,13 @@
 
 All reported numbers are from the existing full run in the repository. Each grid cell uses $64$ replicates. We organize the experiments around four questions.
 
-\subsection{Does Best-of-\texorpdfstring{$N$}{N} improve proxy return while harming real utility out of support?}
+\subsection{Does candidate-count pressure improve proxy return while harming real utility out of support?}
 
-Yes, in the controlled out-of-support condition. Table~\ref{tab:headline} shows the phase split. In support and at the support edge, naive Best-of-$N$ improves selected real utility. Out of support, it improves the proxy score but decreases real utility.
+Yes, in the controlled out-of-support condition. Table~\ref{tab:headline} shows the phase split. In support and at the support edge, naive top-score selection improves selected real utility. Out of support, it improves the proxy score but decreases real utility.
 
 \begin{table}[t]
 \centering
-\caption{\textbf{Naive Best-of-$N$ phases.} The same selection rule helps under supported targets and hurts under the out-of-support target. Values are means across replicates.}
+\caption{\textbf{Naive top-score selection phases.} The same selection rule helps under supported targets and hurts under the out-of-support target. Values are means across replicates.}
 \label{tab:headline}
 \begin{tabular}{lrrrrl}
 \toprule
@@ -31,15 +31,15 @@ The failure is not a mere lack of prompt satisfaction. For the out-of-support ta
   \label{fig:sweep}
 \end{figure}
 
-The sweep in Figure~\ref{fig:sweep} shows the transition across target returns. For example, at target $7.733$ the $N=64$ real-utility gap is $-0.123$; at target $8.920$ it is $-0.523$; at target $9.514$ it is $-0.604$. This is the empirical Tail Phase Diagram: the sign of the Best-of-$N$ effect changes as support gap grows.
+The sweep in Figure~\ref{fig:sweep} shows the transition across target returns. For example, at target $7.733$ the $N=64$ real-utility gap is $-0.123$; at target $8.920$ it is $-0.523$; at target $9.514$ it is $-0.604$. This is the empirical Tail Phase Diagram: the sign of the candidate-count effect changes as support gap grows.
 
-\subsection{Does the exact law match Monte Carlo?}
+\subsection{Does the exact accounting match Monte Carlo?}
 
 Yes. The exact tie-aware law is evaluated on a finite candidate pool with rounded proxy scores to create ties. Table~\ref{tab:law} reports representative rows. The maximum absolute error in expected real utility across all evaluated $N$ values is $0.00535$, well within one to two Monte Carlo standard errors for the reported rows.
 
 \begin{table}[t]
 \centering
-\caption{\textbf{Tie-aware law validation.} Exact expected real utility closely matches Monte Carlo estimates for Best-of-$N$ on the finite candidate distribution.}
+\caption{\textbf{Tie-aware accounting validation.} Exact expected real utility closely matches Monte Carlo estimates for top-score selection on the finite candidate distribution.}
 \label{tab:law}
 \begin{tabular}{rrrrr}
 \toprule
@@ -55,14 +55,14 @@ $N$ & Exact $\E[\utility]$ & MC $\E[\utility]$ & Abs. error & MC stderr \\
 
 \begin{figure}[t]
   \centering
-  \includegraphics[width=0.90\linewidth]{figures/exact_law_validation.pdf}
-  \caption{\textbf{Exact law validation.} The closed-form finite-$N$ curve tracks Monte Carlo estimates as selection pressure moves toward the high-score, lower-utility tail.}
+  \includegraphics[width=0.90\linewidth]{figures/exact_accounting_validation.pdf}
+  \caption{\textbf{Exact accounting validation.} The closed-form finite-pool curve tracks Monte Carlo estimates as selection pressure moves toward the high-score, lower-utility tail.}
   \label{fig:law}
 \end{figure}
 
 \subsection{Do controls behave as predicted?}
 
-The in-support control confirms that Best-of-$N$ is not being portrayed as universally harmful. Under the in-support target, naive real utility rises from $4.821$ to $4.975$ between $N=1$ and $N=64$. The edge-support target also improves, from $6.311$ to $6.454$.
+The in-support control confirms that candidate-count pressure is not being portrayed as universally harmful. Under the in-support target, naive real utility rises from $4.821$ to $4.975$ between $N=1$ and $N=64$. The edge-support target also improves, from $6.311$ to $6.454$.
 
 The anti-aligned scorer control goes in the opposite direction. We select candidates using a score that is intentionally anti-aligned with real utility under the in-support target. Real utility falls from $4.841$ at $N=1$ to $4.653$ at $N=64$, a change of $-0.188$. This matches Proposition~\ref{prop:law}: increasing $N$ amplifies the high-score tail of whichever score is used.
 
@@ -103,4 +103,4 @@ Oracle real & 9.247 & 8.466 & 0.00651 & 1.085 \\
 \end{figure}
 
 \paragraph{Claim audit.}
-The repository audit returns the verdict \texttt{paper-worthy v1}. The supported claims are exactly the controlled claims tested here: finite-$N$ law validation, out-of-support fantasy detection, in-support and anti-aligned controls, repair diagnostics, deployment-gate validity, and absence of forbidden overclaims in the scanned Markdown artifacts.
+The repository audit returns the verdict \texttt{submission-ready v2}. The supported claims are exactly the controlled claims tested here: finite-pool accounting validation, out-of-support fantasy detection, in-support and anti-aligned controls, repair diagnostics, deployment-gate validity, and absence of forbidden overclaims in the scanned Markdown artifacts.

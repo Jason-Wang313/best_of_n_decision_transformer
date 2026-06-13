@@ -1,8 +1,8 @@
 import numpy as np
 
-from decision_transformer_best_of_n.data import generate_offline_dataset
-from decision_transformer_best_of_n.model import TinyDecisionTransformer
-from decision_transformer_best_of_n.repairs import SupportEstimator, make_candidate
+from return_support_audit.data import generate_offline_dataset
+from return_support_audit.model import TinyDecisionTransformer
+from return_support_audit.repairs import SupportEstimator, make_candidate
 
 
 def test_tiny_dt_trains_and_rolls_out():

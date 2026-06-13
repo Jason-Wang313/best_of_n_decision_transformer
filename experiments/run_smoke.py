@@ -1,7 +1,7 @@
 from pathlib import Path
 
-from decision_transformer_best_of_n.config import ExperimentConfig
-from decision_transformer_best_of_n.experiments import run_experiment
+from return_support_audit.config import ExperimentConfig
+from return_support_audit.experiments import run_experiment
 
 
 if __name__ == "__main__":

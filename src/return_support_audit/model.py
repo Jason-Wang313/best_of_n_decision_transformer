@@ -3,7 +3,7 @@
 This is intentionally not a benchmark-scale Transformer. It is a learned
 sequence policy that conditions each action on state, previous action, time,
 and desired return-to-go, which is the DT-style ingredient needed for the
-controlled Best-of-N study.
+controlled return-support audit.
 """
 
 from __future__ import annotations

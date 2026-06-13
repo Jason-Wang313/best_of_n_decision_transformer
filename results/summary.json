@@ -1,5 +1,5 @@
 {
-  "audit_verdict": "paper-worthy v1",
+  "audit_verdict": "submission-ready v2",
   "config": {
     "action_clip": 1.65,
     "figure_formats": [
@@ -28,8 +28,8 @@
     "seed": 313
   },
   "gate_examples": {
-    "edge_support": "allow_high_n",
-    "in_support": "allow_high_n",
+    "edge_support": "allow_candidate_sweep",
+    "in_support": "allow_candidate_sweep",
     "out_of_support": "collect_pilot_labels"
   },
   "mode": "full",

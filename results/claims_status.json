@@ -1,6 +1,6 @@
 {
   "allowed_verdicts": [
-    "paper-worthy v1",
+    "submission-ready v2",
     "needs stronger learned model",
     "needs benchmark validation",
     "redesign required"
@@ -15,7 +15,7 @@
     "deployment_gate_valid": {
       "evidence": {
         "gate_decisions": [
-          "allow_high_n",
+          "allow_candidate_sweep",
           "collect_pilot_labels"
         ]
       },
@@ -28,7 +28,7 @@
       },
       "passed": true
     },
-    "finite_n_law_validated": {
+    "finite_pool_accounting_validated": {
       "evidence": {
         "max_abs_error_real": 0.0053447338100474084
       },
@@ -54,5 +54,5 @@
       "passed": true
     }
   },
-  "verdict": "paper-worthy v1"
+  "verdict": "submission-ready v2"
 }

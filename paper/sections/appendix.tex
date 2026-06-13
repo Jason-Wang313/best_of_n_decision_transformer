@@ -10,8 +10,8 @@ Let $A_g$ be the event that the maximal sampled score equals $z_g$. Since the $N
 \]
 Conditional on $A_g$, at least one sampled candidate lies in group $g$ and no sampled candidate has a higher score. Uniform tie-breaking selects among the sampled group-$g$ candidates. Because the sampled candidates inside group $g$ are exchangeable and drawn from the conditional distribution $\dist(\cand\mid \score=z_g)$, the selected utility has expectation $\mu_g$. Therefore
 \[
-  \E[\utility_{\best(N)}]
-  =\sum_g \Prob(A_g)\E[\utility_{\best(N)}\mid A_g]
+  \E[\utility_{\sel(N)}]
+  =\sum_g \Prob(A_g)\E[\utility_{\sel(N)}\mid A_g]
   =\sum_g (F_g^N-F_{g-1}^N)\mu_g.
 \]
 Replacing $\mu_g$ by $z_g$ gives the selected-score identity.
@@ -35,4 +35,4 @@ The support diagnostics are computed from the offline proxy-return distribution.
 
 \subsection{Deployment gate}
 
-The deployment gate returns one of four actions: allow high-$N$ selection, lower the target return, collect pilot real-utility labels, or block high-$N$ selection. In the full run, the in-support and edge-support examples return \texttt{allow\_high\_n}; the out-of-support example returns \texttt{collect\_pilot\_labels}. This gate is a diagnostic policy for the synthetic environment, not a general deployment standard.
+The deployment gate returns one of four actions: allow candidate sweeps, lower the target return, collect pilot real-utility labels, or block candidate sweeps. In the full run, the in-support and edge-support examples return \texttt{allow\_candidate\_sweep}; the out-of-support example returns \texttt{collect\_pilot\_labels}. This gate is a diagnostic policy for the synthetic environment, not a general deployment standard.

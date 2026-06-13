@@ -69,7 +69,7 @@ def plot_return_conditioning_fantasy(
 
     axes[1].plot(n, real, marker="s", color=PALETTE["real"], label="Real utility R")
     axes[1].axhline(real[0], color=PALETTE["neutral"], linestyle=":", linewidth=1.2, label="N=1 baseline")
-    axes[1].set_xlabel("Best-of-N candidates")
+    axes[1].set_xlabel("candidate count N")
     axes[1].set_ylabel("Real utility")
     axes[1].set_xscale("log", base=2)
     axes[1].set_xticks(n)
@@ -202,7 +202,7 @@ def plot_support_diagnostics(
     _save(fig, output_dir, "support_diagnostics", config.figure_formats)
 
 
-def plot_exact_law_validation(
+def plot_exact_accounting_validation(
     exact_rows: list[dict[str, Any]],
     output_dir: Path,
     config: ExperimentConfig,
@@ -213,17 +213,17 @@ def plot_exact_law_validation(
     mc = np.asarray([float(row["mc_expected_real"]) for row in rows])
 
     fig, ax = plt.subplots(figsize=(6.9, 4.6))
-    ax.plot(n, exact, marker="o", color=PALETTE["support"], label="Exact tie-aware law")
+    ax.plot(n, exact, marker="o", color=PALETTE["support"], label="Exact accounting")
     ax.plot(n, mc, marker="s", color=PALETTE["real"], linestyle="--", label="Monte Carlo")
     ax.set_xscale("log", base=2)
     ax.set_xticks(n)
     ax.set_xticklabels([str(v) for v in n])
-    ax.set_xlabel("Best-of-N candidates")
+    ax.set_xlabel("candidate count N")
     ax.set_ylabel("Expected selected real utility")
-    ax.set_title("Finite-N law validation")
+    ax.set_title("Finite-pool accounting validation")
     ax.grid(True, alpha=0.22)
     ax.legend(frameon=False)
-    _save(fig, output_dir, "exact_law_validation", config.figure_formats)
+    _save(fig, output_dir, "exact_accounting_validation", config.figure_formats)
 
 
 def make_all_figures(
@@ -238,5 +238,4 @@ def make_all_figures(
     plot_repair_comparison(aggregated, output_dir, config)
     plot_target_return_sweep(target_sweep, support, output_dir, config)
     plot_support_diagnostics(target_sweep, output_dir, config)
-    plot_exact_law_validation(exact_rows, output_dir, config)
-
+    plot_exact_accounting_validation(exact_rows, output_dir, config)

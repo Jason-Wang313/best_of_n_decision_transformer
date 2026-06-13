@@ -1,4 +1,4 @@
-"""Support-aware Best-of-N selection and DT-specific repair diagnostics."""
+"""Support-aware repair diagnostics for Decision-Transformer prompt audits."""
 
 from __future__ import annotations
 
@@ -10,17 +10,17 @@ import numpy as np
 from .data import Rollout, TrajectoryBatch
 
 GateDecision = Literal[
-    "allow_high_n",
+    "allow_candidate_sweep",
     "lower_target_return",
     "collect_pilot_labels",
-    "block_high_n",
+    "block_candidate_sweep",
 ]
 
 GATE_DECISIONS: tuple[GateDecision, ...] = (
-    "allow_high_n",
+    "allow_candidate_sweep",
     "lower_target_return",
     "collect_pilot_labels",
-    "block_high_n",
+    "block_candidate_sweep",
 )
 
 
@@ -201,7 +201,7 @@ def deployment_gate(
     pilot_delta_real: float | None = None,
     behavior_logp: float | None = None,
 ) -> GateDecision:
-    """Return exactly one high-N deployment decision."""
+    """Return exactly one large candidate-count deployment decision."""
 
     support_gap = support.support_gap(target_return, 0.95)
     likelihood_bad = (
@@ -209,13 +209,13 @@ def deployment_gate(
     )
 
     if support_gap <= 0.05 and not likelihood_bad:
-        return "allow_high_n"
+        return "allow_candidate_sweep"
     if pilot_delta_real is not None and (pilot_delta_real < -0.20 or likelihood_bad):
-        return "block_high_n"
+        return "block_candidate_sweep"
     if support_gap <= 0.85:
         return "lower_target_return"
     if pilot_delta_real is None:
         return "collect_pilot_labels"
     if pilot_delta_real >= -0.05 and not likelihood_bad:
         return "lower_target_return"
-    return "block_high_n"
+    return "block_candidate_sweep"
