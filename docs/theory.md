@@ -20,6 +20,13 @@ The identity separates selection pressure from utility alignment. Increasing `N`
 
 Decision Transformer-style policies condition actions on desired return-to-go. When prompted above the support of offline returns, a learned policy can extrapolate toward action patterns that satisfy the proxy return signal. In this controlled environment, the proxy underprices risky actions, while real utility penalizes those actions convexly.
 
+The expanded v3 suite turns this mechanism into four measurable axes:
+
+- Candidate-count pressure: increasing `N` moves selected samples toward the highest proxy tail.
+- Target-return overshoot: increasing the prompt beyond the observed return frontier increases the chance that selected trajectories satisfy the prompt through unsupported actions.
+- Behavior support: likelihood and empirical-return filters test whether the selected tail remains behavior-plausible.
+- Pilot real utility: small labeled sets test whether direct utility feedback can correct proxy-tail selection.
+
 ## Finite-Pool Variant
 
 The repo also includes exact enumeration for small finite pools sampled without replacement. That function is used in tests to verify tie handling under a second sampling protocol.

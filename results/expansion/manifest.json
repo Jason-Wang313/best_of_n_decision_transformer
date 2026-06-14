@@ -1,0 +1,23 @@
+{
+  "all_passed": true,
+  "claims": "C:\\Users\\wangz\\best_of_n_decision_transformer\\results\\expansion\\claims.json",
+  "figures": [
+    "C:\\Users\\wangz\\best_of_n_decision_transformer\\figures\\figure6_candidate_count_256.png",
+    "C:\\Users\\wangz\\best_of_n_decision_transformer\\figures\\figure7_target_overshoot.png",
+    "C:\\Users\\wangz\\best_of_n_decision_transformer\\figures\\figure8_repair_ladder_256.png",
+    "C:\\Users\\wangz\\best_of_n_decision_transformer\\figures\\figure9_pilot_noise_stress.png"
+  ],
+  "quick": false,
+  "summary": "C:\\Users\\wangz\\best_of_n_decision_transformer\\results\\expansion\\expanded_summary.csv",
+  "support": {
+    "max_return": 7.2286062331700975,
+    "q50": 3.5786936782018417,
+    "q90": 5.500392451083699,
+    "q95": 6.31391436589062,
+    "q99": 7.104500583826632,
+    "support_gap_q95": 3.0,
+    "support_gap_q99": 2.2094137820639874,
+    "target_return": 9.31391436589062
+  },
+  "trials": "C:\\Users\\wangz\\best_of_n_decision_transformer\\results\\expansion\\expanded_trials.csv"
+}

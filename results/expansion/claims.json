@@ -1,0 +1,60 @@
+{
+  "all_passed": true,
+  "checks": {
+    "behavior_filter_recovers_raw_tail": {
+      "observed": 1.2159557995649797,
+      "op": ">",
+      "passed": true,
+      "threshold": 0.45
+    },
+    "candidate_count_proxy_rises_to_256": {
+      "observed": 0.2240426912910749,
+      "op": ">",
+      "passed": true,
+      "threshold": 0.1
+    },
+    "candidate_count_real_drops_to_256": {
+      "observed": -0.629400072052916,
+      "op": "<",
+      "passed": true,
+      "threshold": -0.25
+    },
+    "candidate_count_selected_risk_rises": {
+      "observed": 0.007110236356487403,
+      "op": ">",
+      "passed": true,
+      "threshold": 0.005
+    },
+    "noise_scale_changes_unsafe_rate": {
+      "observed": 0.11309523809523803,
+      "op": ">",
+      "passed": true,
+      "threshold": 0.02
+    },
+    "oracle_gap_shows_recoverable_candidates": {
+      "observed": 1.23918489143088,
+      "op": ">",
+      "passed": true,
+      "threshold": 0.6
+    },
+    "pilot_repair_recovers_raw_tail": {
+      "observed": 1.1463487161377044,
+      "op": ">",
+      "passed": true,
+      "threshold": 0.45
+    },
+    "pilot_size_changes_calibrated_real": {
+      "observed": 0.4428029104829019,
+      "op": ">",
+      "passed": true,
+      "threshold": 0.03
+    },
+    "target_overshoot_high_n_worsens_high_gap": {
+      "observed": -1.174213777242457,
+      "op": "<",
+      "passed": true,
+      "threshold": -0.2
+    }
+  },
+  "mode": "full-v3"
+}

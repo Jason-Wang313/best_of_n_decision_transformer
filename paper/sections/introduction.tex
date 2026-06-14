@@ -6,12 +6,15 @@ That interface also creates a trap. In offline reinforcement learning, the data 
 
 This paper studies that mechanism in a controlled setting. We deliberately separate the internal/proxy return $\score$ from real utility $\utility$, train a small learned Decision Transformer-style policy on synthetic offline trajectories with limited high-return support, and evaluate top-score selection under in-support, edge-support, and out-of-support return prompts. The goal is not benchmark dominance. The goal is a precise account of when selected return is evidence of utility and when it is a return-conditioning fantasy.
 
+The central scientific object is not a generic best-of-$N$ wrapper. It is the interaction between a return-to-go prompt, the empirical return support of the offline data, a learned sequence policy that extrapolates actions to satisfy the prompt, and a selector that ranks candidates by proxy return. A text-only verifier paper or a latent world-model paper can talk about score tails without ever asking whether a target return was supported by behavior data. Here, that support question is the object of study.
+
 \paragraph{Contributions.}
 First, we give a tie-aware finite-pool accounting identity that groups candidates by score level and computes selected real-utility expectation under top-score selection.
 Second, we introduce two diagnostics: the Return Fantasy Microscope, which reports prompt-satisfaction, support, and real-utility gaps, and the Tail Phase Diagram, which classifies whether candidate-count pressure helps, saturates, or hurts as $N$ grows.
 Third, we provide a learned DT-style synthetic study in which out-of-support target returns create the intended failure: naive top-score selection increases selected proxy return from $9.299$ to $9.468$ while real utility decreases from $7.825$ to $7.381$ between $N=1$ and $N=64$.
-Fourth, we evaluate controls and repairs. In-support selection improves real utility; an anti-aligned scorer hurts it; behavior-likelihood and pilot real-utility calibration recover much of the lost utility in the out-of-support condition.
-Finally, we include a claim audit that treats the study as a controlled v1: it supports the mechanism claims above and leaves benchmark-scale validation for future work.
+Fourth, the expanded v3 suite pushes the candidate-count tail to $N=256$, sweeps target overshoot beyond the offline $q_{95}$ boundary, varies pilot-label budget, and stresses rollout noise. At $N=256$, selected proxy return increases by $0.224$ over $N=1$ while real utility decreases by $0.629$.
+Fifth, we evaluate controls and repairs. In-support selection improves real utility; an anti-aligned scorer hurts it; behavior-likelihood and pilot real-utility calibration recover more than one real-utility point in the high-candidate out-of-support condition.
+Finally, we include a claim audit that treats the study as a controlled v3 artifact: it supports the mechanism claims above, checks the expanded stress suite, checks the final PDF page count, forbids stale or overbroad claims, and leaves benchmark-scale validation for future work.
 
 \begin{figure}[t]
   \centering
