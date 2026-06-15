@@ -4,7 +4,7 @@ $PaperDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $RepoRoot = Split-Path -Parent $PaperDir
 $BuildDir = Join-Path $RepoRoot "build\latex"
 $FinalDir = Join-Path $PaperDir "final"
-$FinalPdf = Join-Path $FinalDir "best_of_n_decision_transformer-v3.pdf"
+$FinalPdf = Join-Path $FinalDir "best_of_n_decision_transformer-v4.pdf"
 
 New-Item -ItemType Directory -Force -Path $BuildDir | Out-Null
 New-Item -ItemType Directory -Force -Path $FinalDir | Out-Null

@@ -9,6 +9,6 @@
 - [x] Add ICLR-style LaTeX manuscript under `paper/`.
 - [x] Add BibTeX references for canonical related work.
 - [x] Include all required figures in the LaTeX draft.
-- [ ] Add benchmark environments.
+- [x] Add a CPU-light CartPole-v1 benchmark tier.
 - [ ] Train a larger Transformer architecture.
-- [ ] Add real deployment labels.
+- [ ] Add D4RL, MuJoCo, Atari, larger-Transformer, and real deployment validation.

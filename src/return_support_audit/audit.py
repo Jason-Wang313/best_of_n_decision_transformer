@@ -9,20 +9,24 @@ from pathlib import Path
 from typing import Any
 
 
-_STALE_VERSION = "v" + "2"
+_STALE_VERSION_2 = "v" + "2"
+_STALE_VERSION_3 = "v" + "3"
 
 FORBIDDEN_CLAIMS = (
     "we solve offline rl",
     "top-score selection always hurts",
     "calibration always fixes it",
-    f"submission-ready {_STALE_VERSION}",
-    f"best_of_n_decision_transformer-{_STALE_VERSION}",
-    f"{_STALE_VERSION}.pdf",
+    f"submission-ready {_STALE_VERSION_2}",
+    f"submission-ready {_STALE_VERSION_3}",
+    f"best_of_n_decision_transformer-{_STALE_VERSION_2}",
+    f"best_of_n_decision_transformer-{_STALE_VERSION_3}",
+    f"{_STALE_VERSION_2}.pdf",
+    f"{_STALE_VERSION_3}.pdf",
     "iclr" + "_submission",
 )
 
 VERDICTS = (
-    "submission-ready v3",
+    "submission-ready v4",
     "needs stronger learned model",
     "needs benchmark validation",
     "redesign required",
@@ -88,7 +92,8 @@ def evaluate_claims(root: Path) -> dict[str, Any]:
     anti_rows = _read_csv(results / "anti_aligned_control.csv")
     summary = json.loads((results / "summary.json").read_text())
     expansion = _load_json(results / "expansion" / "claims.json")
-    final_pdf = root / "paper" / "final" / "best_of_n_decision_transformer-v3.pdf"
+    cartpole = _load_json(results / "cartpole_benchmark" / "claims.json")
+    final_pdf = root / "paper" / "final" / "best_of_n_decision_transformer-v4.pdf"
     n_max = max(int(row["n"]) for row in summary_rows)
 
     naive_out_n1 = _find_summary_row(summary_rows, "naive", "out_of_support", 1)
@@ -154,14 +159,18 @@ def evaluate_claims(root: Path) -> dict[str, Any]:
             "passed": len(forbidden_hits) == 0,
             "evidence": {"hits": forbidden_hits},
         },
-        "expanded_v3_suite_passes": {
+        "expanded_suite_passes": {
             "passed": bool(expansion and expansion.get("all_passed")),
             "evidence": {"path": "results/expansion/claims.json"},
+        },
+        "cartpole_benchmark_passes": {
+            "passed": bool(cartpole and cartpole.get("all_passed")),
+            "evidence": {"path": "results/cartpole_benchmark/claims.json"},
         },
         "final_pdf_at_least_25_pages": {
             "passed": _pdf_pages(final_pdf) >= 25,
             "evidence": {
-                "path": "paper/final/best_of_n_decision_transformer-v3.pdf",
+                "path": "paper/final/best_of_n_decision_transformer-v4.pdf",
                 "pages": _pdf_pages(final_pdf),
             },
         },
@@ -177,7 +186,7 @@ def choose_verdict(claims: dict[str, Any]) -> str:
     if not claims["fantasy_detected_out_of_support"]["passed"]:
         return "needs stronger learned model"
     if all(claim["passed"] for claim in claims.values()):
-        return "submission-ready v3"
+        return "submission-ready v4"
     return "needs benchmark validation"
 
 
@@ -207,9 +216,9 @@ def write_claim_audit(root: Path, claims: dict[str, Any], verdict: str) -> dict[
         "",
         f"Chosen verdict: `{verdict}`.",
         "",
-        "This repository is a scoped submission-ready v3 study. It validates finite-pool accounting, the synthetic DT-style return-conditioning failure mode, expanded N=256 stress tests, support-target sweeps, pilot-size ablations, noise stress, and the listed repairs in this environment. Benchmark-scale validation remains future work.",
+        "This repository is a scoped submission-ready v4 study. It validates finite-pool accounting, the synthetic DT-style return-conditioning failure mode, expanded N=256 stress tests, support-target sweeps, pilot-size ablations, noise stress, a CPU-light CartPole-v1 benchmark tier, and the listed repairs in this environment. It does not claim D4RL, MuJoCo, Atari, or deployment-scale dominance.",
         "",
-        "Audit rule: the verdict must be exactly one of `submission-ready v3`, `needs stronger learned model`, `needs benchmark validation`, or `redesign required`.",
+        "Audit rule: the verdict must be exactly one of `submission-ready v4`, `needs stronger learned model`, `needs benchmark validation`, or `redesign required`.",
     ]
     (docs / "final_audit.md").write_text("\n".join(final_lines) + "\n", encoding="utf-8")
     return status

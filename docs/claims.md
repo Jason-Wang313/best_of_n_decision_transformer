@@ -10,10 +10,11 @@ The claim audit in `results/claims_status.*` is the source of truth for which cl
 - An anti-aligned scorer is a negative control showing that the tail relation between score and utility matters.
 - The repair ladder improves real utility for the controlled out-of-support case, with the oracle selector included only as a diagnostic upper bound.
 - The deployment gate returns exactly one of `allow_candidate_sweep`, `lower_target_return`, `collect_pilot_labels`, or `block_candidate_sweep`.
-- The expanded v3 suite shows the high-N tail explicitly: at `N = 256`, proxy return rises while real utility drops under the out-of-support target.
+- The expanded suite shows the high-N tail explicitly: at `N = 256`, proxy return rises while real utility drops under the out-of-support target.
 - Target-return overshoot sweeps show that increasing the prompt beyond the offline frontier worsens the high-N real-utility tail.
 - Behavior-likelihood filtering and pilot-calibrated selection recover much of the lost real utility at `N = 256` in this controlled environment.
 - Pilot-label-size and proxy-noise sweeps demonstrate that the conclusion is sensitive to audit information and score noise rather than being a single lucky random seed.
+- A CPU-light CartPole-v1 benchmark tier shows the same failure shape under standard control dynamics: raw high-N proxy selection raises the short-horizon proxy while collapsing true episode return, and support-aware, conservative, behavior-cloning, and oracle diagnostic baselines expose the missing support mechanism.
 - The final PDF is gated by an audit rule requiring at least 25 pages of manuscript content.
 
 ## Explicit Non-Claims
@@ -21,6 +22,6 @@ The claim audit in `results/claims_status.*` is the source of truth for which cl
 - This study does not establish a general solution for offline RL.
 - It does not claim every use of top-score selection is harmful.
 - It does not claim calibration is universally sufficient.
-- It does not replace benchmark validation or real deployment labels.
+- It does not replace D4RL, MuJoCo, Atari, larger-Transformer, or real deployment validation.
 - It does not claim that the small DT-style model is a benchmark-scale Decision Transformer.
 - It does not claim that the oracle selector is deployable; it is only a diagnostic upper bound.

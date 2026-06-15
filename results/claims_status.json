@@ -1,6 +1,6 @@
 {
   "allowed_verdicts": [
-    "submission-ready v3",
+    "submission-ready v4",
     "needs stronger learned model",
     "needs benchmark validation",
     "redesign required"
@@ -9,6 +9,12 @@
     "anti_aligned_scorer_control": {
       "evidence": {
         "real_gain_nmax_vs_n1": -0.18845364523758334
+      },
+      "passed": true
+    },
+    "cartpole_benchmark_passes": {
+      "evidence": {
+        "path": "results/cartpole_benchmark/claims.json"
       },
       "passed": true
     },
@@ -21,7 +27,7 @@
       },
       "passed": true
     },
-    "expanded_v3_suite_passes": {
+    "expanded_suite_passes": {
       "evidence": {
         "path": "results/expansion/claims.json"
       },
@@ -36,8 +42,8 @@
     },
     "final_pdf_at_least_25_pages": {
       "evidence": {
-        "pages": 25,
-        "path": "paper/final/best_of_n_decision_transformer-v3.pdf"
+        "pages": 27,
+        "path": "paper/final/best_of_n_decision_transformer-v4.pdf"
       },
       "passed": true
     },
@@ -67,5 +73,5 @@
       "passed": true
     }
   },
-  "verdict": "submission-ready v3"
+  "verdict": "submission-ready v4"
 }

@@ -2,10 +2,13 @@
 \label{sec:related}
 
 \paragraph{Return-conditioned sequence modeling.}
-Decision Transformer casts reinforcement learning as conditional sequence modeling over return-to-go, states, and actions \citep{chen2021decision}. Trajectory Transformer similarly studies offline RL through sequence modeling and planning over learned trajectory distributions \citep{janner2021trajectory}. Our study uses the return-conditioned inference interface from this line of work, but intentionally strips away benchmark complexity to isolate one selection mechanism.
+Decision Transformer casts reinforcement learning as conditional sequence modeling over return-to-go, states, and actions \citep{chen2021decision}. Trajectory Transformer similarly studies offline RL through sequence modeling and planning over learned trajectory distributions \citep{janner2021trajectory}. Our study uses the return-conditioned inference interface from this line of work, but keeps the main experiment controlled to isolate one selection mechanism.
 
 \paragraph{Offline RL and support constraints.}
 Offline RL methods address the danger of evaluating or improving policies outside the support of the behavior data \citep{levine2020offline}. D4RL provides benchmark datasets for this setting \citep{fu2021d4rl}. Conservative and support-aware methods such as BCQ, BEAR, CQL, and MOPO constrain or penalize out-of-distribution actions and values \citep{fujimoto2019bcq,kumar2019bear,kumar2020cql,yu2020mopo}. Our repair ladder is not a new offline RL algorithm; it borrows the support-awareness principle to audit return-conditioned trajectory selection.
+
+\paragraph{Control benchmarks.}
+CartPole is a standard control problem originating in classic reinforcement-learning work \citep{barto1983neuronlike} and popularized in modern benchmark tooling by OpenAI Gym \citep{brockman2016openai}. We use CartPole-v1 as a CPU-light external dynamics check, not as a claim of benchmark leadership. Its role is to ask whether the proxy/support/return split survives outside the synthetic one-dimensional microscope.
 
 \paragraph{Score reranking, reward models, and proxy overoptimization.}
 Score-based reranking is widely used with learned reward models in language-model alignment and summarization systems \citep{stiennon2022summarize,nakano2022webgpt,ouyang2022instructgpt}. Recent analyses study theoretical properties of candidate reranking policies and the scaling of reward-model overoptimization \citep{beirami2025bon,gao2022rewardoveropt}. Our contribution is complementary: we give finite, tie-aware utility accounting for a fixed candidate distribution and apply it to return-conditioned trajectory selection with explicit offline-support diagnostics.

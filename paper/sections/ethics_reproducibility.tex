@@ -3,10 +3,14 @@
 
 The study uses synthetic data and has no human-subject component. The main risk is conceptual misuse: treating higher selected proxy return as evidence of real improvement without checking support and utility tails. The intended use is the opposite: to encourage audits before deploying large candidate-count inference on learned proxies.
 
-The repository contains code, tests, figures, CSV outputs, and a claim audit. The original full run uses seed $313$, $450$ offline trajectories, horizon $12$, $64$ replicates per grid cell, and $N \in \{1,2,4,8,16,32,64\}$. The expanded v3 suite reuses the same deterministic environment family and adds a sequential, RAM-light $N=256$ tail audit, target-return overshoot sweep, repair ladder, pilot-label-size ablation, and proxy-noise stress test. Reproducibility commands are:
-\[
-\texttt{bash scripts/run\_all.sh}, \quad
-\texttt{bash scripts/run\_claim\_audit.sh}, \quad
-\texttt{pytest}.
-\]
+The repository contains code, tests, figures, CSV outputs, and a claim audit. The original full run uses seed $313$, $450$ offline trajectories, horizon $12$, $64$ replicates per grid cell, and $N \in \{1,2,4,8,16,32,64\}$. The expanded suite reuses the same deterministic environment family and adds a sequential, RAM-light $N=256$ tail audit, target-return overshoot sweep, repair ladder, pilot-label-size ablation, and proxy-noise stress test. The CartPole-v1 tier uses seed $2026$, $32$ shared-initial-state pools, candidate counts $N\in\{1,4,16,64\}$, and standard CartPole constants. Reproducibility commands are:
+\begin{quote}
+\small
+\begin{verbatim}
+bash scripts/run_all.sh
+python -m experiments.run_cartpole_benchmark
+bash scripts/run_claim_audit.sh
+pytest
+\end{verbatim}
+\end{quote}
 The audit verdict and exact evidence are stored in \texttt{results/claims\_status.md} and \texttt{results/claims\_status.json}.

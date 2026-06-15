@@ -62,7 +62,7 @@ Support variable & often absent or implicit & offline proxy-return quantiles and
 Failure signal & score improves, metric drops & prompt satisfaction improves while support gap, action risk, and real utility expose extrapolation \\
 Repair signal & generic reranker or calibration & support-target lowering, behavior likelihood, pilot real-utility labels, and oracle real utility \\
 Controls & usually only low versus high $N$ & in-support helps, out-of-support hurts, anti-aligned score hurts, target-overshoot boundary shifts \\
-Claim boundary & broad score-tail concern & controlled synthetic offline-RL mechanism, no benchmark-scale claim \\
+Claim boundary & broad score-tail concern & controlled synthetic offline-RL mechanism plus CPU-light CartPole-v1 benchmark tier; no D4RL, MuJoCo, Atari, or deployment-scale claim \\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -148,8 +148,9 @@ Out-of-support candidate-count pressure hurts real utility & Original and expand
 Supported targets are negative controls & Original summary CSV & In-support real utility falls too much under larger $N$. \\
 Anti-aligned score behaves as predicted & Anti-aligned control CSV & The anti-aligned selected tail does not reduce real utility. \\
 Repairs recover real utility in this environment & Original and expanded repair rows & Pilot, behavior filter, or oracle gaps are too small. \\
-Expanded v3 stress passes & Expansion claims JSON & Any high-N, overshoot, pilot, or noise check fails. \\
-Final manuscript is complete & Final v3 PDF & The PDF has fewer than $25$ pages. \\
+Expanded stress passes & Expansion claims JSON & Any high-N, overshoot, pilot, or noise check fails. \\
+CartPole-v1 benchmark passes & CartPole claims JSON & Raw proxy selection does not fail, or support-aware baselines do not repair it. \\
+Final manuscript is complete & Final v4 PDF & The PDF has fewer than $25$ pages. \\
 Forbidden overclaims are absent & README, docs, and paper sources & Broad offline-RL or stale-version claims are found. \\
 \bottomrule
 \end{tabularx}
@@ -157,13 +158,13 @@ Forbidden overclaims are absent & README, docs, and paper sources & Broad offlin
 
 \subsection{Why the small model is not a shortcut}
 
-A harsh reviewer might argue that a linear DT-style model makes the result trivial. The paper's claim does not rely on architectural sophistication. It relies on three conditions: a learned return-conditioned sampler, an offline support frontier, and a proxy-real mismatch in the high-action tail. A larger Transformer would add capacity and benchmark relevance, but it would not remove the need for the return-support audit. If anything, stronger models and richer decoders make it more important to know whether high-return prompts are being satisfied inside or outside behavior support.
+A harsh reviewer might argue that a linear DT-style model makes the result trivial. The paper's claim does not rely on architectural sophistication. It relies on three conditions: a learned return-conditioned sampler, an offline support frontier, and a proxy-real mismatch in the high-action tail. A larger Transformer would add capacity and benchmark relevance, but it would not remove the need for the return-support audit. If anything, stronger models and richer decoders make it more important to know whether high-return prompts are being satisfied inside or outside behavior support. The CartPole-v1 tier is included to check that the same failure-and-repair shape is not confined to the one-dimensional synthetic process.
 
-The controlled model is also useful because it removes a possible confound. If the failure appeared only in a large neural architecture, a reviewer could blame optimization instability, hidden representation collapse, or benchmark noise. Here the model is simple enough that the failure can be traced through action magnitudes, proxy reward, real penalty, behavior likelihood, and support quantiles. The limitation is explicitly acknowledged: this is mechanism evidence, not benchmark dominance evidence.
+The controlled model is also useful because it removes a possible confound. If the failure appeared only in a large neural architecture, a reviewer could blame optimization instability, hidden representation collapse, or benchmark noise. Here the model is simple enough that the failure can be traced through action magnitudes, proxy reward, real penalty, behavior likelihood, and support quantiles. The CartPole tier then asks whether the same diagnosis survives external dynamics. The limitation is explicitly acknowledged: this is mechanism evidence and a CPU-light benchmark check, not benchmark dominance evidence.
 
 \subsection{Expanded CSV schema}
 
-The v3 expansion suite writes \path{results/expansion/expanded_summary.csv}, \path{results/expansion/expanded_trials.csv}, \path{results/expansion/claims.json}, and a manifest. The summary file is the main paper-facing artifact. The trial file keeps selected-candidate rows for forensic checks.
+The expanded suite writes \path{results/expansion/expanded_summary.csv}, \path{results/expansion/expanded_trials.csv}, \path{results/expansion/claims.json}, and a manifest. The summary file is the main paper-facing artifact. The trial file keeps selected-candidate rows for forensic checks.
 
 \begin{table}[t]
 \centering
@@ -284,7 +285,7 @@ The expanded claim JSON records the checks in Table~\ref{tab:claims}. These thre
 \begin{table}[t]
 \centering
 \small
-\caption{\textbf{Expanded v3 claim checks.}}
+\caption{\textbf{Expanded claim checks.}}
 \label{tab:claims}
 \begin{tabularx}{\linewidth}{Xrrr}
 \toprule
@@ -303,9 +304,35 @@ Noise scale changes unsafe-action rate & 0.113 & $>0.020$ & yes \\
 \end{tabularx}
 \end{table}
 
+\subsection{CartPole-v1 benchmark artifacts}
+
+The CartPole-v1 tier is regenerated by \path{experiments/run_cartpole_benchmark.py}. It writes trial rows, summary rows, claims, and a manifest under \path{results/cartpole_benchmark/}, plus Figure~\ref{fig:cartpole}. Each of the $32$ trials uses one shared initial state for the whole candidate pool so that selector differences are not explained by easier or harder starts.
+
+\begin{table}[t]
+\centering
+\small
+\caption{\textbf{CartPole-v1 claim gates.} These checks are read directly by the repository audit.}
+\label{tab:cartpole-claims}
+\begin{tabularx}{\linewidth}{Xrrr}
+\toprule
+Check & observed & threshold & pass \\
+\midrule
+Raw proxy rises from $N=1$ to $N=64$ & 0.075 & $>0.040$ & yes \\
+Raw true return drops from $N=1$ to $N=64$ & -263.2 & $<-120.0$ & yes \\
+Support filter recovers over raw $N=64$ & 454.1 & $>150.0$ & yes \\
+Conservative selector recovers over raw $N=64$ & 438.7 & $>150.0$ & yes \\
+Behavior clone beats raw $N=64$ & 454.1 & $>150.0$ & yes \\
+Oracle gap is visible & 454.1 & $>150.0$ & yes \\
+Raw exploit-policy rate at $N=64$ & 0.969 & $>0.500$ & yes \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+The benchmark is intentionally not a D4RL-style leaderboard. Its purpose is adversarial diagnosis. The raw selector is allowed to see a proxy that is locally sensible but globally misspecified: it rewards short-horizon pole stability and late one-sided action pressure. The support-aware baselines then test whether the failure is due to missing support rather than an empty candidate pool. Since the behavior clone and oracle both reach the capped return while raw high-$N$ selection collapses, the benchmark supports the same scoped mechanism claim as the synthetic microscope.
+
 \subsection{Expanded design matrix}
 
-The v3 expansion was designed as a set of reviewer attacks rather than a single larger run. Each family asks whether a different explanation can defeat the claim. The candidate-count family attacks the possibility that the $N=64$ result is a shallow artifact. The target-overshoot family attacks the support-boundary story. The repair family attacks whether the failure is recoverable from the same candidate pool. The pilot and noise families attack operational sensitivity.
+The expanded suite was designed as a set of reviewer attacks rather than a single larger run. Each family asks whether a different explanation can defeat the claim. The candidate-count family attacks the possibility that the $N=64$ result is a shallow artifact. The target-overshoot family attacks the support-boundary story. The repair family attacks whether the failure is recoverable from the same candidate pool. The pilot and noise families attack operational sensitivity.
 
 \begin{table}[t]
 \centering
@@ -498,48 +525,48 @@ The unsafe-rate column is intentionally included even though it is not monotone.
 
 \subsection{RAM-light reproducibility policy}
 
-The expanded suite is intentionally sequential. It does not keep all candidate trajectories from all families in memory at once. Each replicate samples a candidate pool, records only selected-candidate diagnostics and summary statistics, and writes compact CSV and JSON artifacts. Figures are generated from the summary table, not from a retained in-memory trajectory bank. This keeps the v3 expansion compatible with ordinary laptop hardware while still increasing experimental scope.
+The expanded suite is intentionally sequential. It does not keep all candidate trajectories from all families in memory at once. Each replicate samples a candidate pool, records only selected-candidate diagnostics and summary statistics, and writes compact CSV and JSON artifacts. Figures are generated from the summary table, not from a retained in-memory trajectory bank. This keeps the expansion compatible with ordinary laptop hardware while still increasing experimental scope.
 
 This matters for the claims. A large but unreproducible run would not make the paper more submission-ready. The acceptance target is instead: enough replicates and stress axes to attack the mechanism, deterministic scripts that regenerate every table, and artifacts small enough for a reviewer or fresh agent to inspect. The repository therefore treats \path{expanded_summary.csv}, \path{expanded_trials.csv}, and \path{claims.json} as audit artifacts rather than temporary notebooks.
 
 \subsection{Additional reviewer attack checklist}
 
-Table~\ref{tab:reviewer-checklist} records the strongest attacks that remain after the v3 expansion and the exact evidence used to answer them. The point is not to claim that every attack is fully solved. The point is to ensure that every paper claim is no broader than the evidence that survives these attacks.
+Table~\ref{tab:reviewer-checklist} records the strongest attacks that remain after the expanded suite and CartPole-v1 benchmark tier, plus the exact evidence used to answer them. The point is not to claim that every attack is fully solved. The point is to ensure that every paper claim is no broader than the evidence that survives these attacks.
 
 \begin{table}[t]
 \centering
 \small
-\caption{\textbf{Reviewer attack checklist after the v3 expansion.}}
+\caption{\textbf{Reviewer attack checklist after the expanded suite and CartPole-v1 tier.}}
 \label{tab:reviewer-checklist}
 \begin{tabularx}{\linewidth}{p{0.28\linewidth}p{0.34\linewidth}X}
 \toprule
 Attack & Evidence in this artifact & Remaining limitation \\
 \midrule
 The model is too small. & The paper calls it DT-style and focuses on the return-conditioning interface; claims are mechanism-level. & Benchmark-scale Transformers remain future work. \\
-The result is synthetic. & Synthetic setup exposes proxy reward, real utility, support boundary, and action risk exactly. & External-control benchmarks are not claimed. \\
+The result is synthetic. & Synthetic setup exposes proxy reward, real utility, support boundary, and action risk exactly; CartPole-v1 repeats the failure under standard control dynamics. & D4RL, MuJoCo, Atari, and deployment-scale claims are not made. \\
 The theorem is generic. & The empirical object is target-return overshoot relative to offline support, not only top-score accounting. & The accounting identity is supporting machinery, not the sole novelty. \\
 The original $N=64$ result may be accidental. & Candidate-count stress extends to $N=256$ with proxy up, real down, risk up, and logp down. & Larger $N$ values could be explored but are not needed for the stated failure. \\
 Candidate selection can help. & In-support and edge-support targets improve under high candidate counts. & The paper makes a conditional boundary claim, not a universal harm claim. \\
 Repairs are cherry-picked. & The ladder includes random, target-lowered, likelihood-filtered, pilot-calibrated, and oracle selectors. & Richer support estimators may improve over these simple diagnostics. \\
 Pilot calibration is expensive. & Label-size ablation reports gains from $4$ through $64$ labels and shows diminishing returns. & Real deployments may have noisier labels or delayed outcomes. \\
 Unsafe rate is confusing. & Correlation analysis shows why risk magnitude and behavior likelihood are more informative. & Better multidimensional support diagnostics are future work. \\
-The manuscript duplicates other candidate-count papers. & The evidence centers return-to-go prompts, offline return quantiles, target overshoot, support gates, and pilot real utility. & A future version should add benchmark-scale DT experiments to strengthen distinction further. \\
+The manuscript duplicates other candidate-count papers. & The evidence centers return-to-go prompts, offline return quantiles, target overshoot, support gates, pilot real utility, and CartPole-v1 support failures. & Large-scale DT experiments would extend the scope, not define the current claim. \\
 \bottomrule
 \end{tabularx}
 \end{table}
 
 \subsection{Self-attack log}
 
-The following attacks were used to harden the v3 manuscript:
+The following attacks were used to harden the v4 manuscript:
 \begin{enumerate}
-  \item \textbf{This is only a synthetic environment.} Correct. The paper says this repeatedly and does not claim benchmark-scale offline-RL validity.
+  \item \textbf{This is only a synthetic environment.} The paper now adds CartPole-v1 while still avoiding D4RL, MuJoCo, Atari, or deployment-scale claims.
   \item \textbf{The finite-pool law is not novel enough.} Correct as a standalone theorem. The law is audit bookkeeping; the contribution is return-support diagnosis for DT prompts.
   \item \textbf{The model is tiny.} Correct. It is a learned DT-style component sufficient for a controlled mechanism study, not a competitive Transformer.
   \item \textbf{Increasing $N$ helps in some settings.} Correct and reported. In-support and edge-support rows help; this is why the paper uses a Tail Phase Diagram rather than a universal harm claim.
   \item \textbf{Support calibration changes the prompt.} Correct. The paper treats it as a deployment gate, not as a same-target optimizer.
   \item \textbf{Pilot calibration needs real labels.} Correct. The label budget ablation makes this cost explicit.
   \item \textbf{The target overshoot result is non-monotonic.} Correct. Moderate overshoot can help; far-out overshoot collapses. This nuance is central.
-  \item \textbf{Unsafe-action rate is high even at $N=1$.} Correct. The v3 claim uses selected risk, behavior likelihood, and real utility rather than only unsafe rate.
+  \item \textbf{Unsafe-action rate is high even at $N=1$.} Correct. The v4 claim uses selected risk, behavior likelihood, CartPole action imbalance, and real utility rather than only unsafe rate.
   \item \textbf{Noise stress could be a decoding artifact.} Correct. That is why it is reported as an inference-time stress, not as a property of all DT decoders.
   \item \textbf{The paper could look like other best-of-$N$ papers.} The manuscript avoids this by foregrounding return prompts, offline support quantiles, behavior likelihood, pilot real labels, and support-target gates.
 \end{enumerate}
@@ -570,10 +597,11 @@ Before release, the repository should satisfy:
 \begin{enumerate}
   \item the original full suite regenerates the baseline figures and tables;
   \item the expanded suite regenerates \texttt{results/expansion/claims.json} with \texttt{all\_passed=true};
-  \item the final PDF is built at \path{paper/final/best_of_n_decision_transformer-v3.pdf};
+  \item the CartPole-v1 benchmark regenerates \path{results/cartpole_benchmark/claims.json} with \texttt{all\_passed=true};
+  \item the final PDF is built at \path{paper/final/best_of_n_decision_transformer-v4.pdf};
   \item the final PDF has at least 25 pages;
   \item the LaTeX log has no undefined references, citation warnings, overfull boxes, fatal errors, or emergency stops;
-  \item the claim audit returns \texttt{submission-ready v3};
+  \item the claim audit returns \texttt{submission-ready v4};
   \item the Desktop PDF hash matches the repository final PDF hash;
   \item the Desktop source map points this paper to the source folder and GitHub repository.
 \end{enumerate}
@@ -585,16 +613,18 @@ The final artifact is intended to be inspectable by a fresh agent without privat
   \item \texttt{python -m compileall src tests experiments -q};
   \item \texttt{pytest -q};
   \item \texttt{bash scripts/run\_all.sh};
+  \item \texttt{python -m experiments.run\_cartpole\_benchmark};
   \item \texttt{bash scripts/run\_claim\_audit.sh}.
 \end{enumerate}
-The expected terminal-level outcome is that the test suite passes, the full run reports \texttt{submission-ready v3}, and the claim audit repeats the same verdict. The final PDF should then be rebuilt with the paper build script and checked for page count and LaTeX log cleanliness.
+The expected terminal-level outcome is that the test suite passes, the full run and CartPole benchmark regenerate passing claim JSON files, and the claim audit reports \texttt{submission-ready v4}. The final PDF should then be rebuilt with the paper build script and checked for page count and LaTeX log cleanliness.
 
 The minimum artifact set for a reviewer or fresh agent is:
 \begin{enumerate}
   \item the final PDF in \texttt{paper/final};
   \item the original summary, sweep, repair, anti-aligned, and accounting CSV files in \texttt{results};
   \item the expanded summary, trial, claims, and manifest files in \texttt{results/expansion};
-  \item the nine paper figures in \texttt{figures};
+  \item the CartPole benchmark artifacts in \texttt{results/cartpole\_benchmark};
+  \item the ten paper figures in \texttt{figures};
   \item the claim-status JSON and markdown files;
   \item the source files for the model, data generator, repair selectors, metrics, and audit.
 \end{enumerate}

@@ -9,4 +9,4 @@ The manuscript states the controlled-v1 limits plainly:
 - simple support estimator;
 - pilot calibration assumes limited real-utility labels;
 - oracle selector is diagnostic only;
-- benchmark environments and larger models remain future work.
+- D4RL, MuJoCo, Atari, larger models, and real deployment labels remain future work.

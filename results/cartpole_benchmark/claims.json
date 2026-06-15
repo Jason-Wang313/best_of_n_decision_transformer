@@ -1,0 +1,55 @@
+{
+  "all_passed": true,
+  "checks": {
+    "cartpole_behavior_clone_baseline_beats_raw": {
+      "description": "A behavior-cloning baseline beats raw high-N proxy selection.",
+      "observed": 454.125,
+      "op": ">",
+      "passed": true,
+      "threshold": 150.0
+    },
+    "cartpole_conservative_q_repairs": {
+      "description": "A conservative support-penalized selector recovers true return over raw proxy selection.",
+      "observed": 438.6875,
+      "op": ">",
+      "passed": true,
+      "threshold": 150.0
+    },
+    "cartpole_oracle_gap_visible": {
+      "description": "The sampled pool contains high-return candidates that raw proxy selection ignores.",
+      "observed": 454.125,
+      "op": ">",
+      "passed": true,
+      "threshold": 150.0
+    },
+    "cartpole_raw_exploit_rate_high": {
+      "description": "Raw high-N proxy selection is dominated by short-horizon exploit policies.",
+      "observed": 0.96875,
+      "op": ">",
+      "passed": true,
+      "threshold": 0.5
+    },
+    "cartpole_raw_proxy_extremizes": {
+      "description": "Increasing candidate count raises the raw short-horizon proxy score on CartPole-v1.",
+      "observed": 0.07520394947873621,
+      "op": ">",
+      "passed": true,
+      "threshold": 0.04
+    },
+    "cartpole_raw_return_collapses": {
+      "description": "The same raw selection lowers true CartPole-v1 episode return.",
+      "observed": -263.21875,
+      "op": "<",
+      "passed": true,
+      "threshold": -120.0
+    },
+    "cartpole_support_filter_repairs": {
+      "description": "A support-likelihood filter recovers true return over raw proxy selection.",
+      "observed": 454.125,
+      "op": ">",
+      "passed": true,
+      "threshold": 150.0
+    }
+  },
+  "summary": "raw return change -263.2, support repair 454.1, conservative repair 438.7."
+}

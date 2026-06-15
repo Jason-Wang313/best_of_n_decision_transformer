@@ -1,0 +1,25 @@
+{
+  "all_passed": true,
+  "benchmark": "CartPole-v1",
+  "candidate_counts": [
+    1,
+    4,
+    16,
+    64
+  ],
+  "claims": "C:\\Users\\wangz\\best_of_n_decision_transformer\\results\\cartpole_benchmark\\claims.json",
+  "dynamics": "Gymnasium CartPole-v1 constants",
+  "figure": "C:\\Users\\wangz\\best_of_n_decision_transformer\\figures\\figure10_cartpole_benchmark.png",
+  "max_steps": 500,
+  "seed": 2026,
+  "selectors": [
+    "raw_proxy",
+    "support_filter",
+    "conservative_q",
+    "behavior_clone",
+    "random_policy",
+    "oracle_real"
+  ],
+  "summary": "C:\\Users\\wangz\\best_of_n_decision_transformer\\results\\cartpole_benchmark\\cartpole_summary.csv",
+  "trials": "C:\\Users\\wangz\\best_of_n_decision_transformer\\results\\cartpole_benchmark\\cartpole_trials.csv"
+}
