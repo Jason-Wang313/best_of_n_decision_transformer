@@ -1,3 +1,7 @@
+param(
+    [string]$DesktopCopy = ""
+)
+
 $ErrorActionPreference = "Stop"
 
 $PaperDir = Split-Path -Parent $MyInvocation.MyCommand.Path
@@ -23,7 +27,17 @@ try {
     }
 
     Copy-Item -LiteralPath $BuiltPdf -Destination $FinalPdf -Force
+    if ($DesktopCopy) {
+        $DesktopDir = Split-Path -Parent $DesktopCopy
+        if ($DesktopDir) {
+            New-Item -ItemType Directory -Force -Path $DesktopDir | Out-Null
+        }
+        Copy-Item -LiteralPath $FinalPdf -Destination $DesktopCopy -Force
+    }
     Write-Host "Wrote $FinalPdf"
+    if ($DesktopCopy) {
+        Write-Host "Wrote $DesktopCopy"
+    }
 }
 finally {
     Pop-Location

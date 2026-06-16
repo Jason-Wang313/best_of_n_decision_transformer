@@ -37,6 +37,12 @@ The Bash scripts are written to work on this Windows checkout as well as convent
 - `docs/final_audit.md`
 - `paper/final/best_of_n_decision_transformer-v4.pdf`
 
+Build the final repository and visible Desktop PDFs with:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File paper/build_submission.ps1 -DesktopCopy "C:\Users\wangz\OneDrive\Desktop\best_of_n_decision_transformer-v4.pdf"
+```
+
 ## What Is Implemented
 
 - Synthetic offline trajectories with scarce high-return support.
