@@ -7,10 +7,10 @@
 - GitHub remote: `https://github.com/Jason-Wang313/best_of_n_decision_transformer.git`
 - Repository PDF: `paper/final/best_of_n_decision_transformer-v4.pdf`
 - Visible Desktop PDF: `C:\Users\wangz\OneDrive\Desktop\best_of_n_decision_transformer-v4.pdf`
-- SHA256: `94B6063A8DDFCB6BC8CF19BE06C2E8590886D3AA9B2FDDD2434725A8FF6BB5B2`
+- SHA256: `5DB0F4B3548DCEF1C6E463A9D2198E806165C3E387E7B15131FB0C2272C01515`
 - Page count: 27
 - Repo/Desktop hash match: yes
-- Verified on: 2026-06-16
+- Verified on: 2026-06-19
 
 ## Final Verification
 
@@ -31,7 +31,7 @@ Results:
 - Claim audit: `submission-ready v4`.
 - Final LaTeX log scan: no unresolved citations, unresolved references, rerun warnings, overfull boxes, or natbib warnings.
 - PDF render: all 27 pages rendered.
-- Visual QA: pages 1, 13, 17, 20, 24, and 27 inspected for title/abstract, CartPole benchmark, DT-specific model/pseudocode, stress tables, repair diagnostics, fresh-agent reproduction manifest, clipping, and readability.
+- Visual QA: pages 1, 5, 8, 9, 12, 14, 18, 20, 24, and 27 inspected for title/abstract, main figures, benchmark/stress tables, references, appendix diagnostics, fresh-agent reproduction manifest, clipping, and readability.
 
 Chosen verdict: `submission-ready v4`.
 

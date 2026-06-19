@@ -4,9 +4,9 @@
   "github_remote": "https://github.com/Jason-Wang313/best_of_n_decision_transformer.git",
   "repository_pdf": "paper/final/best_of_n_decision_transformer-v4.pdf",
   "desktop_pdf": "C:\\Users\\wangz\\OneDrive\\Desktop\\best_of_n_decision_transformer-v4.pdf",
-  "sha256": "94B6063A8DDFCB6BC8CF19BE06C2E8590886D3AA9B2FDDD2434725A8FF6BB5B2",
+  "sha256": "5DB0F4B3548DCEF1C6E463A9D2198E806165C3E387E7B15131FB0C2272C01515",
   "pages": 27,
-  "verified_on": "2026-06-16",
+  "verified_on": "2026-06-19",
   "checks": {
     "compileall": "passed",
     "pytest": "15 passed",
@@ -14,6 +14,6 @@
     "latex_final_log_scan": "passed",
     "repo_desktop_hash_match": true,
     "pdf_render": "all 27 pages rendered",
-    "visual_qa": "pages 1, 13, 17, 20, 24, and 27 inspected"
+    "visual_qa": "pages 1, 5, 8, 9, 12, 14, 18, 20, 24, and 27 inspected"
   }
 }
